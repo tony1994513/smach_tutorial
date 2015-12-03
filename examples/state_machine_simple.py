@@ -2,7 +2,6 @@
 
 import rospy
 import smach
-import smach_ros
 
 # define state Foo
 class Foo(smach.State):
