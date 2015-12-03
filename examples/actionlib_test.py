@@ -18,7 +18,6 @@ Output:
     [INFO] : State machine terminating 'GOAL_STATIC':'aborted':'succeeded'
 """
 
-import roslib; roslib.load_manifest('smach_tutorials')
 import rospy
 import smach
 import smach_ros
