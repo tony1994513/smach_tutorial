@@ -44,9 +44,9 @@ import rospy
 import threading
 from math import sqrt, pow
 
-import smach
-from smach import StateMachine, ServiceState, SimpleActionState, MonitorState, IntrospectionServer, Concurrence
-
+import smach,smach_ros
+from smach_ros import  ServiceState, SimpleActionState, IntrospectionServer,MonitorState
+from smach import StateMachine, Concurrence
 import std_srvs.srv
 import turtlesim.srv
 import turtlesim.msg
@@ -88,6 +88,11 @@ def main():
                     request = turtlesim.srv.TeleportAbsoluteRequest(9.0,5.0,0.0)),
                 {'succeeded':'DRAW_SHAPES'})
 
+        
+        
+        
+        
+        
         # Draw some polygons
         shapes_cc = Concurrence(
                 outcomes=['succeeded','aborted','preempted'],
@@ -128,7 +133,7 @@ def main():
     sis.start()
 
     # Set preempt handler
-    smach.set_preempt_handler(sm0)
+    smach_ros.set_preempt_handler(sm0)
 
     # Execute SMACH tree in a separate thread so that we can ctrl-c the script
     smach_thread = threading.Thread(target = sm0.execute)

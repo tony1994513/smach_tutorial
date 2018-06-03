@@ -28,10 +28,14 @@ import rospy
 import threading
 
 import smach
-from smach import StateMachine, ServiceState, SimpleActionState, IntrospectionServer, Concurrence
-
-import std_srvs.srv
+import rospy
+from  smach import StateMachine
 import turtlesim.srv
+import std_srvs.srv
+import smach_ros
+from smach_ros import ServiceState, SimpleActionState,IntrospectionServer
+# from turtle_actionlib.msg import ShapeAction, ShapeGoal
+from smach import Concurrence
 import turtle_actionlib.msg
 
 
@@ -39,8 +43,8 @@ def main():
     rospy.init_node('smach_usecase_step_05')
 
     # Construct static goals
-    polygon_big = turtle_actionlib.msg.ShapeGoal(edges = 11, radius = 4.0)
-    polygon_small = turtle_actionlib.msg.ShapeGoal(edges = 6, radius = 0.5) 
+    polygon_big = turtle_actionlib.msg.ShapeGoal(edges = 4, radius = 1)
+    polygon_small = turtle_actionlib.msg.ShapeGoal(edges = 3, radius = 0.5) 
 
     # Create a SMACH state machine
     sm0 = StateMachine(outcomes=['succeeded','aborted','preempted'])
@@ -61,13 +65,13 @@ def main():
         # Teleport turtle 1
         StateMachine.add('TELEPORT1',
                 ServiceState('turtle1/teleport_absolute', turtlesim.srv.TeleportAbsolute,
-                    request = turtlesim.srv.TeleportAbsoluteRequest(5.0,1.0,0.0)),
+                    request = turtlesim.srv.TeleportAbsoluteRequest(0,0,0.0)),
                 {'succeeded':'TELEPORT2'})
 
         # Teleport turtle 2
         StateMachine.add('TELEPORT2',
                 ServiceState('turtle2/teleport_absolute', turtlesim.srv.TeleportAbsolute,
-                    request = turtlesim.srv.TeleportAbsoluteRequest(9.0,5.0,0.0)),
+                    request = turtlesim.srv.TeleportAbsoluteRequest(0,0,0.0)),
                 {'succeeded':'DRAW_SHAPES'})
 
         # Draw some polygons
@@ -93,7 +97,7 @@ def main():
     sis.start()
 
     # Set preempt handler
-    smach.set_preempt_handler(sm0)
+    smach_ros.set_preempt_handler(sm0)
 
     # Execute SMACH tree in a separate thread so that we can ctrl-c the script
     smach_thread = threading.Thread(target = sm0.execute)

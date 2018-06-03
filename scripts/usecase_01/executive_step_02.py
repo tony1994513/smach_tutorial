@@ -19,10 +19,15 @@ import rospy
 import threading
 
 import smach
-from smach import StateMachine, ServiceState, SimpleActionState
-
-import std_srvs.srv
+import rospy
+from  smach import StateMachine
 import turtlesim.srv
+import std_srvs.srv
+import smach_ros
+from smach_ros import ServiceState, SimpleActionState
+from turtle_actionlib.msg import ShapeAction, ShapeGoal
+from smach import Concurrence
+
 
 def main():
     rospy.init_node('smach_usecase_step_02')

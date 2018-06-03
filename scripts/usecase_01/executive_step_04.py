@@ -25,10 +25,14 @@ import rospy
 import threading
 
 import smach
-from smach import StateMachine, ServiceState, SimpleActionState, IntrospectionServer
-
-import std_srvs.srv
+import rospy
+from  smach import StateMachine
 import turtlesim.srv
+import std_srvs.srv
+import smach_ros
+from smach_ros import ServiceState, SimpleActionState,IntrospectionServer
+# from turtle_actionlib.msg import ShapeAction, ShapeGoal
+from smach import Concurrence
 import turtle_actionlib.msg
 
 
@@ -83,7 +87,7 @@ def main():
     sis.start()
 
     # Set preempt handler
-    smach.set_preempt_handler(sm0)
+    smach_ros.set_preempt_handler(sm0)
 
     # Execute SMACH tree in a separate thread so that we can ctrl-c the script
     smach_thread = threading.Thread(target = sm0.execute)
